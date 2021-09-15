@@ -1,0 +1,52 @@
+{% schema %}
+  {
+    "name": "Featured-Products",
+    "tag": "section",
+
+    "settings": [
+    	{
+    		"type": "text",
+    		"id": "title",
+    		"label": "Heading",
+    		"default": "text"
+    	},
+        {
+            "type": "checkbox",
+            "id": "show_css_grid_section",
+            "label": "Show CSS Grid",
+            "default": true
+        },
+        
+        {
+            "type": "select",
+            "id": "featured-products-collection",
+            "label": "Collection",
+            "options": [
+                {
+                    "value": "first",
+                    "label": "First"
+                },
+                {
+                    "value": "second",
+                    "label": "Second"
+                }
+
+            ]
+        }
+    ],
+    "presets": [
+    	{
+    		"name": "Featured Products",
+    		"category": "custom section"
+    	}
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+
+
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
