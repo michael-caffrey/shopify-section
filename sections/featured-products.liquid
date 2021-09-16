@@ -1,36 +1,40 @@
 <div id="shopify-section-featured-products" class="shopify-section index-section">
 	<div class="page-width">
 
-		<!-- Add conditional to pull from settings schema -->
-		<div class="section-header text-center">
-			<h2>The users text</h2>
-		</div>
+		{% if section.settings.title != blank %}
+			<div class="section-header text-center">
+				<h2>{{ section.settings.title | escape }}</h2>
+			</div>
+		{% else %}
+			<div class="section-header text-center">
+            	<h2>Section Title</h2>
+        	</div>
+        {% endif %}
 
 		<!-- items grid -->
+
+		{%- assign max_height = 250 -%}
+		{%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
+
+		{%- assign collection = collections[section.settings.collection] -%}
 		<ul class="grid grid--uniform grid--view-items">
 
-			<!-- item container -->
-			<li class="grid__item grid__item--collection">
-				<!-- item page link -->
-				<a class="product-image" href="#"></a>
-				<div class="grid-view-item__image-wrapper">
-					<!-- item image add for specific image in collection -->
-					<img src="image.jpg">
-				</div>
+			{% for product in collection.products limit: product_limit %}
+				
+			    <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
+			    	<div class="grid-view-item__image-wrapper">
+						<a href="{{ product.url }}" class="grid__image">
+							<!-- img src="{{ product.featured_image.src | img_url: 'medium' }}" alt="{{ product.featured_image.alt | escape }}"-->
+						</a>
+						
+					    {% include 'product-card-grid', max_height: max_height, product: product %}
+					    <button type="button">Add to Cart</button>
+				    </div>
+			    </li>
 
-				<!-- product title -->
-				<div class="h4 collection-item__title">PRODUCT TITLE</div>
-
-				<!--product price -->
-				<div class="price">PRICE</div>
-
-				<!-- add cart button for step 3 -->
-				<button type="button">Add to cart/place holder</button>
-
-			</li>
-
-			<!-- second item etc -->
-
+			     
+		    {% endfor %}
+		
 		</ul>
 
 	</div>
@@ -47,31 +51,17 @@
     		"type": "text",
     		"id": "title",
     		"label": "Heading",
-    		"default": "text"
+    		"default": "Featured Products"
     	},
-        {
-            "type": "checkbox",
-            "id": "show_css_grid_section",
-            "label": "Show CSS Grid",
-            "default": true
-        },
         
-        {
-            "type": "select",
-            "id": "featured-products-collection",
-            "label": "Collection",
-            "options": [
-                {
-                    "value": "first",
-                    "label": "First"
-                },
-                {
-                    "value": "second",
-                    "label": "Second"
-                }
 
-            ]
+        {
+        	"id": "collection",
+        	"type": "collection",
+        	"label": "Collection"
         }
+        
+        
     ],
     "presets": [
     	{
@@ -84,6 +74,11 @@
 
 {% stylesheet %}
 
+.grid-view-item__image-wrapper {
+    margin: 0;
+    position: relative;
+    width: 100%;
+}
 
 {% endstylesheet %}
 
