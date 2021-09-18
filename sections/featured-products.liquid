@@ -1,7 +1,11 @@
+{% comment %}
+	iterates through products, and adds the items to Shopify's product grid card.
+	variantID returns the products variant, or first available. 
+
+{% endcomment %}
+
 <head>
 	<style>
-
-
 		.btn__featured__cart {
 		  	font-family: arial, sans-serif;
 		  	font-weight: bold;
@@ -14,7 +18,6 @@
 		  	color: white;
 		  	background: rgb(116, 71, 255);
 		}
-
 		.btn__featured__cart:hover {
 		  	font-family: arial, sans-serif;
 		  	font-weight: bold;
@@ -27,11 +30,9 @@
 		  	color: rgb(116, 71, 255);
 		  	background: white;
 		}
-
 		.btn__featured__cart--fold {
 			position: relative;
 		}
-
 		.btn__featured__cart--fold:before {
 			content: "";
 			position: absolute;
@@ -41,6 +42,12 @@
 			height: 0px;
 			border-bottom: 10px solid #white;
 			border-left: 10px solid rgb(70, 57, 129);
+		}
+
+		.grid-view-item__image-wrapper {
+		    margin: 0;
+		    position: relative;
+		    width: 100%;
 		}
 
 	</style>
@@ -65,9 +72,11 @@
 			{%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
 
 			{%- assign collection = collections[section.settings.collection] -%}
+
+
 			<ul class="grid grid--uniform grid--view-items">
 
-				{% for product in collection.products limit: product_limit %}
+				{% for product in collection.products limit: 4 %}
 					
 				    <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
 				    	<div class="grid-view-item__image-wrapper">
@@ -76,7 +85,31 @@
 							
 						    {% include 'product-card-grid', max_height: max_height, product: product %}
 				
-						    <button class="btn__featured__cart btn__featured__cart--fold">ADD TO CART</button>
+						   
+						    {% assign variantID = product.selected_or_first_available_variant.id%}
+
+						    <button type="submit" onclick="addToCart({{ variantID }})" name="add" class="btn__featured__cart btn__featured__cart--fold"
+						    {% if settings.enable_ajax %}aria-haspopup="dialog"{% endif %} data-add-to-cart>ADD TO CART</button>
+						    
+
+						    <script>
+
+								function addToCart(variantID) {
+								
+
+									jQuery.ajax({
+
+										url: '/cart/add.js',
+										type: 'post',
+										dataType: 'json',
+										data: { quantity: 1, id: variantID }
+									})
+								}
+
+							</script>
+						    
+
+						    
 					    </div>
 				    </li>
 
@@ -123,17 +156,7 @@
 {% stylesheet %}
 
 	
-.grid-view-item__image-wrapper {
-    margin: 0;
-    position: relative;
-    width: 100%;
-}
 
-
-.btn__featured__cart {
-  	background-color: rgb(116, 71, 255);
- 
-}
 
 {% endstylesheet %}
 
