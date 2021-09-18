@@ -1,7 +1,6 @@
 {% comment %}
 	iterates through products, and adds the items to Shopify's product grid card.
 	variantID returns the products variant, or first available. 
-
 {% endcomment %}
 
 {%- assign max_height = 250 -%}
@@ -26,7 +25,6 @@
 		  	background: var(--purple-color);
 		  	color: white;
 		  	border: 2px solid white;
-
 		}
 
 		.btn__featured__cart-text {
@@ -37,14 +35,12 @@
 		  	font-size: 12px;
 		  	letter-spacing: .08em;
 			text-decoration: none;
-			display: inline-block;
-			
+			display: inline-block;		
 		}
 
 		.btn__featured__cart:hover {
-		  	background: white;
-		  	color: var(--purple-color);
-		  	
+		  	background-color: white;
+		  	color: black;	  	
 		  	box-shadow: -3px -3px 0px var(--purple-color) inset, 3px 3px 0px var(--purple-color) inset;
 		}
 
@@ -60,9 +56,7 @@
 			height: 0px;
 			border-bottom: 10px solid white;
 			border-left: 10px solid rgb(70, 57, 129);
-		}
-
-		
+		}	
 		
 	</style>
 </head>
@@ -80,8 +74,6 @@
 	        	</div>
 	        {% endif %}
 
-			
-
 			<ul class="grid grid--uniform grid--view-items">
 
 				{% for product in collection.products limit: 4 %}
@@ -92,8 +84,6 @@
 							</a>
 							
 						    {% include 'product-card-grid', max_height: max_height, product: product %}
-				
-						   
 						    {% assign variantID = product.selected_or_first_available_variant.id%}
 
 						   <button type="submit" onclick="addToCart({{ variantID }})" name="add" class="btn__featured__cart btn__featured__cart--fold"
@@ -104,55 +94,44 @@
 						    <script>
 
 								function addToCart(variantID) {
-								
 
 									jQuery.ajax({
-
 										url: '/cart/add.js',
 										type: 'post',
 										dataType: 'json',
 										data: { quantity: 1, id: variantID }
 									})
-									.done(function)
 								}
 
 							</script>
 						    
-
-						    
 					    </div>
 				    </li>
-
 				     
 			    {% endfor %}
 			
 			</ul>
-
 		</div>
 	</div>
 </body>
 
 {% schema %}
+
   {
     "name": "Featured-Products",
     "tag": "section",
-
     "settings": [
     	{
     		"type": "text",
     		"id": "title",
     		"label": "Heading",
     		"default": "Featured Products"
-    	},
-        
-
+    	},    
         {
         	"id": "collection",
         	"type": "collection",
         	"label": "Collection"
-        }
-        
-        
+        }  
     ],
     "presets": [
     	{
@@ -161,13 +140,10 @@
     	}
     ]
   }
+
 {% endschema %}
 
 {% stylesheet %}
-
-	
-
-
 {% endstylesheet %}
 
 {% javascript %}
