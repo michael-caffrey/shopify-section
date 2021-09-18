@@ -4,32 +4,50 @@
 
 {% endcomment %}
 
+{%- assign max_height = 250 -%}
+{%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
+
+{%- assign collection = collections[section.settings.collection] -%}
+
+
 <head>
 	<style>
+
+		:root {
+			--purple-color: rgb(116, 71, 255);
+			--btn-font: arial, sans-serif;
+			--btn-fold-color: rgb(70, 57, 129);
+
+		}
+
 		.btn__featured__cart {
-		  	font-family: arial, sans-serif;
-		  	font-weight: bold;
-		  	text-transform: uppercase;
-		  	font-size: 15px;
-		  	text-align: center;
 		  	width: 100%;
 		  	height: 2.5em;
-		  	border: 2px solid white;
+		  	background: var(--purple-color);
 		  	color: white;
-		  	background: rgb(116, 71, 255);
+		  	border: 2px solid white;
+
 		}
-		.btn__featured__cart:hover {
-		  	font-family: arial, sans-serif;
+
+		.btn__featured__cart-text {
+			text-align: center;
+			font-family: --var(--btn-font);
 		  	font-weight: bold;
 		  	text-transform: uppercase;
-		  	font-size: 15px;
-		  	text-align: center;
-		  	width: 100%;
-		  	height: 2.5em;
-		  	border: 2px solid rgb(116, 71, 255);
-		  	color: rgb(116, 71, 255);
-		  	background: white;
+		  	font-size: 12px;
+		  	letter-spacing: .08em;
+			text-decoration: none;
+			display: inline-block;
+			
 		}
+
+		.btn__featured__cart:hover {
+		  	background: white;
+		  	color: var(--purple-color);
+		  	
+		  	box-shadow: -3px -3px 0px var(--purple-color) inset, 3px 3px 0px var(--purple-color) inset;
+		}
+
 		.btn__featured__cart--fold {
 			position: relative;
 		}
@@ -40,16 +58,12 @@
 			right: 0%;
 			width: 0px;
 			height: 0px;
-			border-bottom: 10px solid #white;
+			border-bottom: 10px solid white;
 			border-left: 10px solid rgb(70, 57, 129);
 		}
 
-		.grid-view-item__image-wrapper {
-		    margin: 0;
-		    position: relative;
-		    width: 100%;
-		}
-
+		
+		
 	</style>
 </head>
 <body>
@@ -66,13 +80,7 @@
 	        	</div>
 	        {% endif %}
 
-			<!-- items grid -->
-
-			{%- assign max_height = 250 -%}
-			{%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
-
-			{%- assign collection = collections[section.settings.collection] -%}
-
+			
 
 			<ul class="grid grid--uniform grid--view-items">
 
@@ -88,9 +96,10 @@
 						   
 						    {% assign variantID = product.selected_or_first_available_variant.id%}
 
-						    <button type="submit" onclick="addToCart({{ variantID }})" name="add" class="btn__featured__cart btn__featured__cart--fold"
-						    {% if settings.enable_ajax %}aria-haspopup="dialog"{% endif %} data-add-to-cart>ADD TO CART</button>
-						    
+						   <button type="submit" onclick="addToCart({{ variantID }})" name="add" class="btn__featured__cart btn__featured__cart--fold"
+						    {% if settings.enable_ajax %}aria-haspopup="dialog"{% endif %} data-add-to-cart>
+						    	<span class="btn__featured__cart-text">ADD TO CART</span>
+						    </button>
 
 						    <script>
 
@@ -104,6 +113,7 @@
 										dataType: 'json',
 										data: { quantity: 1, id: variantID }
 									})
+									.done(function)
 								}
 
 							</script>
